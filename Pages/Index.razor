@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Timers
 
 <PageTitle>Index</PageTitle>
 
@@ -30,6 +31,12 @@
            </div> 
         }
     </div>
+    <div class ="row">
+        <h2>Matches found: @matchesFound</h2>
+    </div>
+    <div class ="row">
+        <h2>Time: @timeDisplay</h2>
+    </div>
 </div>
 
 @code {
@@ -44,8 +51,16 @@
     };
 
     List<string> shuffledAnimals = new List<string>();
+    int matchesFound = 0;
+    Timer timer;
+    int tenthsOfSecondsElapsed = 0;
+    string timeDisplay;
+
     protected override void OnInitialized()
     {
+        timer = new Timer(100);
+        timer.Elapsed += Timer_Tick;
+
         SetUpGame();
     }
     private void SetUpGame()
@@ -54,6 +69,8 @@
         shuffledAnimals = animalEmoji
             .OrderBy(item => random.Next())
             .ToList();
+        matchesFound = 0;
+        tenthsOfSecondsElapsed = 0;
     }
 
     string lastAnimalFound = string.Empty;
@@ -66,6 +83,8 @@
             // First selection of the pair. Remember it.
             lastAnimalFound = animal;
             lastDescription = animalDescription;
+
+            timer.Start();
         }
         else if ((lastAnimalFound == animal) && (animalDescription != lastDescription))
         {
@@ -76,6 +95,14 @@
             shuffledAnimals = shuffledAnimals
                 .Select(a => a.Replace(animal, string.Empty))
                 .ToList();
+            matchesFound++;
+            if (matchesFound == 8)
+            {
+                timer.Stop();
+                timeDisplay += " - Play Again=";
+
+                SetUpGame();
+            }
         }
         else
         {
@@ -83,5 +110,15 @@
             // Reset selectiong.
             lastAnimalFound = string.Empty;
         }
+    }
+    private void Timer_Tick(Object source, ElapsedEventArgs e)
+    {
+        InvokeAsync(() =>
+        {
+            tenthsOfSecondsElapsed++;
+            timeDisplay = (tenthsOfSecondsElapsed / 10F)
+                .ToString("0.0s");
+            StateHasChanged();
+        });
     }
 }
