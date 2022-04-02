@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gJs0zubzdP2WN20Z56QKOX1K/UrYWGw1IJxMxUa0v14=",
+  "Hash": "v3ul6Ixyx/4mlEVxApuv+YOdKXGAXSx/gbb7o/ghO6Q=",
   "Source": "TSD2490_Oblig1",
   "BasePath": "/",
   "Mode": "Root",
@@ -7087,23 +7087,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
-    },
-    {
-      "Identity": "C:\\Users\\Bruker\\source\\repos\\TS2490_237169\\TSD2490_Oblig1\\wwwroot\\sample-data\\weather.json",
-      "SourceId": "TSD2490_Oblig1",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Bruker\\source\\repos\\TS2490_237169\\TSD2490_Oblig1\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "sample-data/weather.json",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\sample-data\\weather.json"
     }
   ]
 }

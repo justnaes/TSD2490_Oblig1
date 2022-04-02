@@ -40,14 +40,15 @@
 </div>
 
 @code {
-    List<string> animalEmoji = new List<string>()
+    List<string> differentEmojis = new List<string>()
     {
-        "🐶", "🐶",
-        "🐼", "🐼",
-        "🐵", "🐵",
-        "🦊", "🦊",
-        "🐴", "🐴",
-        "🐷", "🐷",
+        "🐶", "🐶", "🐗", "🐗",
+        "🐼", "🐼", "🐘", "🐘",
+        "🐵", "🐵", "🐰", "🐰",
+        "🦊", "🦊", "🐨", "🐨",
+        "🐴", "🐴", "🦨", "🦨",
+        "🐷", "🐷", "🦥", "🦥",
+        "🍈", "🍈", "🥭", "🥭",
     };
 
     List<string> shuffledAnimals = new List<string>();
@@ -66,7 +67,7 @@
     private void SetUpGame()
     {
         Random random = new Random();
-        shuffledAnimals = animalEmoji
+        shuffledAnimals = differentEmojis
             .OrderBy(item => random.Next())
             .ToList();
         matchesFound = 0;
@@ -96,7 +97,7 @@
                 .Select(a => a.Replace(animal, string.Empty))
                 .ToList();
             matchesFound++;
-            if (matchesFound == 8)
+            if (matchesFound == 14)
             {
                 timer.Stop();
                 timeDisplay += " - Play Again=";
