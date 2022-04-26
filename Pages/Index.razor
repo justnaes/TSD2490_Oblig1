@@ -19,16 +19,16 @@
 
 <div class "container">
     <div class="row">
-        @for (var animalNumber = 0; animalNumber < shuffledEmojis.Count; animalNumber++)
+        @for (var animalNumber = 0; animalNumber < shuffledAnimals.Count; animalNumber++)
         {
-            var animal = shuffledEmojis[animalNumber];
+            var animal = shuffledAnimals[animalNumber];
             var uniqueDescription = $"Button #{animalNumber}";
             <div class="col-3">
                 <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
                    type="button" class ="btn btn-outline-dark">
-                    <h1>@animal</h1>
-                </button>
-            </div>
+                   <h1>@animal</h1>
+               </button>
+           </div> 
         }
     </div>
     <div class ="row">
@@ -107,12 +107,11 @@
         }
     }
 
-    List<string> shuffledEmojis = new List<string>();
+    List<string> shuffledAnimals = new List<string>();
     int matchesFound = 0;
     Timer timer;
     int tenthsOfSecondsElapsed = 0;
     string timeDisplay;
-    int duration = 0;
 
     protected override void OnInitialized()
     {
@@ -124,13 +123,14 @@
     private void SetUpGame()
     {
         Random random = new Random();
-        shuffledEmojis = pickEmojis()
+        shuffledAnimals = pickEmojis()
             .OrderBy(item => random.Next())
             .ToList();
-        if(shuffledEmojis == null)
+        if(shuffledAnimals == null)
         {
             restart();
         }
+
         matchesFound = 0;
         tenthsOfSecondsElapsed = 0;
     }
@@ -154,14 +154,14 @@
             lastAnimalFound = string.Empty;
 
             // Replace found animals with empty string to hide them.
-            shuffledEmojis = shuffledEmojis
+            shuffledAnimals = shuffledAnimals
                 .Select(a => a.Replace(animal, string.Empty))
                 .ToList();
             matchesFound++;
             if (matchesFound == 8)
             {
                 timer.Stop();
-                timeDisplay += " - Play Again? Press any of the emojis or the restart game button.";
+                timeDisplay += "";
 
                 SetUpGame();
             }
@@ -169,11 +169,10 @@
         else
         {
             // User selected a pair that don't match.
-            // Reset selection.
+            // Resetting selection.
             lastAnimalFound = string.Empty;
         }
     }
-
     private void Timer_Tick(Object source, ElapsedEventArgs e)
     {
         InvokeAsync(() =>
@@ -184,12 +183,6 @@
                 timeDisplay = (20 - tenthsOfSecondsElapsed / 10F)
                     .ToString("0.0s");
                 StateHasChanged();
-            }
-            else
-            {
-            
-            StateHasChanged();
-                timer.Stop();
             }
         });
     }
