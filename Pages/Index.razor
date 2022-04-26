@@ -19,16 +19,16 @@
 
 <div class "container">
     <div class="row">
-        @for (var animalNumber = 0; animalNumber < shuffledAnimals.Count; animalNumber++)
+        @for (var animalNumber = 0; animalNumber < shuffledEmojis.Count; animalNumber++)
         {
-            var animal = shuffledAnimals[animalNumber];
+            var animal = shuffledEmojis[animalNumber];
             var uniqueDescription = $"Button #{animalNumber}";
             <div class="col-3">
-               <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
+                <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
                    type="button" class ="btn btn-outline-dark">
-                   <h1>@animal</h1>
-               </button>
-           </div> 
+                    <h1>@animal</h1>
+                </button>
+            </div>
         }
     </div>
     <div class ="row">
@@ -37,24 +37,82 @@
     <div class ="row">
         <h2>Time: @timeDisplay</h2>
     </div>
+    <div>
+        <button @onclick="@(() => restart())"
+            id="retry" type="button" class ="btn btn-outline-dark" style="width: 400px; height: 50px">
+            Restart game
+        </button>
+    </div> 
 </div>
 
 @code {
-    List<string> animalEmoji = new List<string>()
+    List<string> animalEmojis = new List<string>()
     {
         "🐶", "🐶",
+        "🐘", "🐘",
         "🐼", "🐼",
         "🐵", "🐵",
-        "🦊", "🦊",
-        "🐴", "🐴",
+        "🐗", "🐗",
         "🐷", "🐷",
+        "🐴", "🐴",
+        "🦊", "🦊",
     };
 
-    List<string> shuffledAnimals = new List<string>();
+    List<string> animal2Emojis = new List<string>()
+    {
+        "🐰", "🐰",
+        "🐨", "🐨",
+        "🦨", "🦨",
+        "🦥", "🦥",
+        "🐪", "🐪",
+        "🦛", "🦛",
+        "🦃", "🦃",
+        "🦢", "🦢",
+    };
+
+    List<string> foodEmojis = new List<string>()
+    {
+        "🍋", "🍋",
+        "🥥", "🥥",
+        "🥑", "🥑",
+        "🍆", "🍆",
+        "🍄", "🍄",
+        "🥐", "🥐",
+        "🍔", "🍔",
+        "🥚", "🥚",
+    };
+
+
+    public List<string> pickEmojis()
+    {
+        Random random = new Random();
+        int randomIndex = random.Next(0, 3);
+
+        if(randomIndex == 0)
+        {
+            return animalEmojis;
+        }
+        else if(randomIndex == 1)
+        {
+            return animal2Emojis;
+        }
+        else if(randomIndex == 2)
+        {
+            return foodEmojis;
+        }
+        else
+        {
+            Console.WriteLine("Error i valg av emojiliste");
+            return null;
+        }
+    }
+
+    List<string> shuffledEmojis = new List<string>();
     int matchesFound = 0;
     Timer timer;
     int tenthsOfSecondsElapsed = 0;
     string timeDisplay;
+    int duration = 0;
 
     protected override void OnInitialized()
     {
@@ -66,9 +124,13 @@
     private void SetUpGame()
     {
         Random random = new Random();
-        shuffledAnimals = animalEmoji
+        shuffledEmojis = pickEmojis()
             .OrderBy(item => random.Next())
             .ToList();
+        if(shuffledEmojis == null)
+        {
+            restart();
+        }
         matchesFound = 0;
         tenthsOfSecondsElapsed = 0;
     }
@@ -92,14 +154,14 @@
             lastAnimalFound = string.Empty;
 
             // Replace found animals with empty string to hide them.
-            shuffledAnimals = shuffledAnimals
+            shuffledEmojis = shuffledEmojis
                 .Select(a => a.Replace(animal, string.Empty))
                 .ToList();
             matchesFound++;
             if (matchesFound == 8)
             {
                 timer.Stop();
-                timeDisplay += " - Play Again=";
+                timeDisplay += " - Play Again? Press any of the emojis or the restart game button.";
 
                 SetUpGame();
             }
@@ -107,18 +169,34 @@
         else
         {
             // User selected a pair that don't match.
-            // Reset selectiong.
+            // Reset selection.
             lastAnimalFound = string.Empty;
         }
     }
+
     private void Timer_Tick(Object source, ElapsedEventArgs e)
     {
         InvokeAsync(() =>
         {
-            tenthsOfSecondsElapsed++;
-            timeDisplay = (tenthsOfSecondsElapsed / 10F)
-                .ToString("0.0s");
+            if(tenthsOfSecondsElapsed < 200)
+            {
+                tenthsOfSecondsElapsed++;
+                timeDisplay = (20 - tenthsOfSecondsElapsed / 10F)
+                    .ToString("0.0s");
+                StateHasChanged();
+            }
+            else
+            {
+            
             StateHasChanged();
+                timer.Stop();
+            }
         });
+    }
+
+    private void restart()
+    {
+        SetUpGame();
+        timer.Start();
     }
 }
