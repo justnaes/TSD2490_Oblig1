@@ -24,11 +24,11 @@
             var animal = shuffledEmojis[animalNumber];
             var uniqueDescription = $"Button #{animalNumber}";
             <div class="col-3">
-               <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
+                <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
                    type="button" class ="btn btn-outline-dark">
-                   <h1>@animal</h1>
-               </button>
-           </div>
+                    <h1>@animal</h1>
+                </button>
+            </div>
         }
     </div>
     <div class ="row">
@@ -48,15 +48,15 @@
 @code {
     List<string> animalEmojis = new List<string>()
     {
-        "🐶", "🐶", 
-        "🐘", "🐘", 
-        "🐼", "🐼", 
-        "🐵", "🐵", 
+        "🐶", "🐶",
+        "🐘", "🐘",
+        "🐼", "🐼",
+        "🐵", "🐵",
         "🐗", "🐗",
         "🐷", "🐷",
         "🐴", "🐴",
         "🦊", "🦊",
-    }; 
+    };
 
     List<string> animal2Emojis = new List<string>()
     {
@@ -66,42 +66,46 @@
         "🦥", "🦥",
         "🐪", "🐪",
         "🦛", "🦛",
-        "🦃", "🦃", 
-        "🦢", "🦢", 
-    }; 
+        "🦃", "🦃",
+        "🦢", "🦢",
+    };
 
     List<string> foodEmojis = new List<string>()
     {
         "🍋", "🍋",
-        "🥥", "🥥", 
+        "🥥", "🥥",
         "🥑", "🥑",
         "🍆", "🍆",
         "🍄", "🍄",
         "🥐", "🥐",
         "🍔", "🍔",
-        "🥚", "🥚", 
+        "🥚", "🥚",
+    };
 
-    }; 
 
-    //public List<string> pickEmoji()
-    //{
-    //    List<List<string>> itemBag = new List<List<string>>();
+    public List<string> pickEmojis()
+    {
+        Random random = new Random();
+        int randomIndex = random.Next(0, 3);
 
-    //    itemBag.Add(animalEmojis);
-    //    itemBag.Add(animal2Emojis);
-    //    itemBag.Add(foodEmojis);
-
-    //    Random random = new Random();
-    //    int randomIndex = random.Next(0, 3);
-
-    //    Array values = Enum.GetValues(typeof(emojis));
-    //    emojis randomEmoji = (emojis)values.GetValue(randomIndex);
-
-    //    Console.WriteLine("Emoji"+randomEmoji);
-
-    //    return itemBag[randomIndex];
-
-    //}
+        if(randomIndex == 0)
+        {
+            return animalEmojis;
+        }
+        else if(randomIndex == 1)
+        {
+            return animal2Emojis;
+        }
+        else if(randomIndex == 2)
+        {
+            return foodEmojis;
+        }
+        else
+        {
+            Console.WriteLine("Error i valg av emojiliste");
+            return null;
+        }
+    }
 
     List<string> shuffledEmojis = new List<string>();
     int matchesFound = 0;
@@ -120,9 +124,13 @@
     private void SetUpGame()
     {
         Random random = new Random();
-        shuffledEmojis = pickEmoji()
+        shuffledEmojis = pickEmojis()
             .OrderBy(item => random.Next())
             .ToList();
+        if(shuffledEmojis == null)
+        {
+            restart();
+        }
         matchesFound = 0;
         tenthsOfSecondsElapsed = 0;
     }
@@ -176,10 +184,11 @@
                 timeDisplay = (20 - tenthsOfSecondsElapsed / 10F)
                     .ToString("0.0s");
                 StateHasChanged();
+
             }
             else
             {
-            //timeDisplay += " - Game over";
+            
             StateHasChanged();
                 timer.Stop();
             }
