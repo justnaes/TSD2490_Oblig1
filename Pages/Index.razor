@@ -42,8 +42,9 @@
             id="retry" type="button" class ="btn btn-outline-dark" style="width: 400px; height: 50px">
             Restart game
         </button>
-    </div> 
+    </div>
 </div>
+
 
 @code {
     List<string> animalEmojis = new List<string>()
@@ -82,7 +83,6 @@
         "🥚", "🥚",
     };
 
-
     public List<string> pickEmojis()
     {
         Random random = new Random();
@@ -102,7 +102,6 @@
         }
         else
         {
-            Console.WriteLine("Error i valg av emojiliste");
             return null;
         }
     }
@@ -112,6 +111,7 @@
     Timer timer;
     int tenthsOfSecondsElapsed = 0;
     string timeDisplay;
+    string score;
 
     protected override void OnInitialized()
     {
@@ -130,7 +130,6 @@
         {
             restart();
         }
-
         matchesFound = 0;
         tenthsOfSecondsElapsed = 0;
     }
@@ -161,8 +160,7 @@
             if (matchesFound == 8)
             {
                 timer.Stop();
-                timeDisplay += "";
-
+                timeDisplay += " Congratulations, you won!";
                 SetUpGame();
             }
         }
@@ -184,6 +182,12 @@
                     .ToString("0.0s");
                 StateHasChanged();
             }
+            else
+            {
+                timeDisplay += " You're out of time, game over.";
+                StateHasChanged();
+                timer.Stop();
+            }
         });
     }
 
@@ -191,5 +195,20 @@
     {
         SetUpGame();
         timer.Start();
+    }
+
+    string GameLost = "You lost, game over.";
+    string GameWon = "Congratulations, you won!";
+
+    private string GameOver(string GameLost, string GameWon)
+    {
+        if(matchesFound == 8)
+        {
+            return GameWon;
+        }
+        else
+        {
+            return GameLost;
+        }
     }
 }
