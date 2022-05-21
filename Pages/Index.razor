@@ -196,19 +196,4 @@
         SetUpGame();
         timer.Start();
     }
-
-    string GameLost = "You lost, game over.";
-    string GameWon = "Congratulations, you won!";
-
-    private string GameOver(string GameLost, string GameWon)
-    {
-        if(matchesFound == 8)
-        {
-            return GameWon;
-        }
-        else
-        {
-            return GameLost;
-        }
-    }
 }
